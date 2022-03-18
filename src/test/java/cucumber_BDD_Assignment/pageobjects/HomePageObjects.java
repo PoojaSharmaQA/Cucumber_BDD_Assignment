@@ -6,13 +6,19 @@ import java.util.Set;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.junit.Assert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.support.ui.ExpectedCondition;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 
-import junit.framework.Assert;
+
+
+
 
 public class HomePageObjects {
 
@@ -22,7 +28,7 @@ public class HomePageObjects {
 
 
 	private By logo= By.xpath("//img[@alt='My Store']");
-	private By searchResult= By.xpath("//strong[normalize-space()='T-shirt']");
+	private By searchResult= By.xpath("//div[@class='ac_results']//li");
 	private By twitterLogo= By.xpath("//a[@href='https://twitter.com/seleniumfrmwrk']");
 	private By Product_Category = By.xpath("//*[@id=\"block_top_menu\"]/ul/li");
 	private By accountHolderName= By.xpath("//span[text()='Selenium Framework']");
@@ -41,39 +47,33 @@ public class HomePageObjects {
 
 
 
-	public void checkImageDimension() {
-		int width=(driver.findElement(logo)).getSize().getWidth();
-		int height= (driver.findElement(logo)).getSize().getHeight();
+	public void checkImageDimension(Integer expectedWidth, Integer expectedHeight) {
+		int actualwidth=(driver.findElement(logo)).getSize().getWidth();
+		int actualheight= (driver.findElement(logo)).getSize().getHeight();
 		//to verify width
-		Assert.assertEquals("Width is not correct",350,width);
-		logger.info("Width of the image is as per requirement");
-		//to verify height
-		Assert.assertEquals("Height is not correct",99,height);
-		logger.info("Height image is as per requirement");
+		Assert.assertTrue(actualwidth==expectedWidth && actualheight==expectedHeight);
+		logger.info("Actual width of the image is " +actualwidth);
+		logger.info("Actual height of the image is " +actualheight);
 
 	}	
 
-	public void searchResultValidation() {
-		if(driver.findElement(searchResult).getText().contains("T-shirt"))
+	public void searchResultValidation(String productName) {
+		WebDriverWait wait = new WebDriverWait(driver,30);
+		wait.until(ExpectedConditions.presenceOfElementLocated(searchResult));
+		if(driver.findElement(searchResult).getText().contains(productName))
 		{
-			System.out.println("Search Result contains T-shirt");
-			logger.info("Search Result contains T-shirt");
+			System.out.println("Search Result contains " +productName);
+			logger.info("Search Result contains " +productName);
 		}
 
 	}
-	public Integer Product_Cat() {
-		Integer Actual_Count = driver.findElements(Product_Category).size();
-		return Actual_Count;
-	}
 
-	//	public void ProductName(String Product) {
-	//		 List<WebElement> list = driver.findElements(Product_Category);
-	//		Iterator<WebElement> itr = list.iterator();
-	//		while(itr.hasNext()) {
-	//			if(Product.equals(itr.next().getText())) {
-	//				Assert.assertTrue(true);
-	//				logger.info("Product Category Matched with Expected ");
-	//			}
+
+	//	public Integer Product_Cat() {
+	//		Integer Actual_Count = driver.findElements(Product_Category).size();
+	//		return Actual_Count;
+	//	}
+
 
 	public void twitterLink() {
 		driver.findElement(twitterLogo).click();
@@ -81,53 +81,41 @@ public class HomePageObjects {
 
 
 	}
-
-
-
-	public void validateAccountName() {
-
-		String accountName=driver.findElement(accountHolderName).getText();
-		Assert.assertEquals("Account holder name is not correct",accountName,"Selenium Framework");
-		logger.info("Account holder name is Selenium Framework");
-	}
-
-	public int productCategoris() {
-		
 	
-		List<WebElement> listOfCategories = driver.findElements(listOfItems);
+//	public void validateAccountName(String accName) {
+//
+//		String accountName=driver.findElement(accountHolderName).getText();
+//		Assert.assertEquals("Account holder name is not correct",accountName,"Selenium Framework");
+//		logger.info("Account holder name is Selenium Framework");
+//	}
 
-		int Count=0;
-
-		for (int i = 0; i < listOfCategories.size(); i++) {
 
 
-			String str=listOfCategories.get(i).getText();
+	public Integer productCategory() {
 
-			if(str.contains("WOMEN") || str.contains("DRESSES")||str.contains("T-SHIRTS")) {
+		Integer actualCount= driver.findElements(Product_Category).size();
+		return actualCount;
+	}
 
-				Count++;
+	public void productName(String product) {
+		List<WebElement> productList= driver.findElements(Product_Category);
+		Iterator<WebElement> itr=productList.iterator();
+		while(itr.hasNext()) {
+			if(product.equals(itr.next().getText())){
+				Assert.assertTrue(true);
+				logger.info("Product category is as expected");
 			}
 
 		}
-
-		return Count;
 
 	}
 
-	public void txtOfProductCategoris() {
-		List<WebElement> list = driver.findElements(listOfItems);
-
-		for (int i = 0; i < list.size(); i++) {
-			String str=list.get(i).getText();
-
-			if(str.contains("WOMEN") || str.contains("DRESSES")||str.contains("T-SHIRTS")) {
-				System.out.print(list.get(i).getText() + "  ");
-			}
-			}
-		}
-}
-
-
+	
 		
+	}
+
+
+
+
 
 

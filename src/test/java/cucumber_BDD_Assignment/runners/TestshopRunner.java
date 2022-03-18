@@ -9,6 +9,7 @@ import io.cucumber.junit.CucumberOptions;
 @CucumberOptions(
 		features="src\\test\\resources\\features",
 		glue="cucumber_BDD_Assignment.stepdefs",
+        //tags="@Application",
 		plugin = {"pretty",
 				"html:target/html/htmlreport.html",
 				"json:target/json/file.json",
@@ -16,6 +17,7 @@ import io.cucumber.junit.CucumberOptions;
 		publish=true,
 		monochrome= true,
 		dryRun= false
+		
 				
 		)
 public class TestshopRunner {

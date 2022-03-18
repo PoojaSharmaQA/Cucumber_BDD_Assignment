@@ -3,6 +3,7 @@ package cucumber_BDD_Assignment.stepdefs;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.junit.Assert;
+import org.openqa.selenium.By;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
@@ -75,9 +76,9 @@ public class Assignment_stepdef {
 		scn.log("user is navigated to home page");
 	}
 	@Then("user get redirected to  {string}")
-	public void user_get_redirected_to(String string) {
+	public void user_get_redirected_to(String expectedUrl) {
 		String actualUrl= hmePageObjects.getUrl();
-		String expectedUrl= "http://automationpractice.com/index.php";
+		//String expectedUrl= "http://automationpractice.com/index.php";
 		Assert.assertEquals(actualUrl,expectedUrl );
 		logger.info("Expected "+expectedUrl+" and actual "+actualUrl+" are matched with each other");
 		scn.log("Expected "+expectedUrl+" and actual "+actualUrl+" are matched with each other");
@@ -89,75 +90,76 @@ public class Assignment_stepdef {
 		scn.log("Logo is displayed");
 	}
 
+
 	@Then("width of logo is {int} and height is {int}")
-	public void width_of_logo_is_and_height_is(Integer int1, Integer int2) {
-		hmePageObjects.checkImageDimension();
+	public void width_of_logo_is_and_height_is(Integer width, Integer height) {
+		hmePageObjects.checkImageDimension(width,height);
 		scn.log("Dimensions of logo according to expectation");
 	}
 
-	@When("Enter text {string} in search text box")
-	public void enter_text_in_search_text_box(String string) {
-		cmnPageObjects.searchTextBox("T-shirt");
+	@When("search a product with name {string}")
+	public void search_a_product_with_name(String productName) {
+		cmnPageObjects.searchTextBox(productName);
 		scn.log("T-shirt enters in search text box");
 	}
 
-	@When("mouse hover on search text box")
-	public void mouse_hover_on_search_text_box() {
-		cmnPageObjects.mouseHoverAction();
-	}
 
 	@Then("search result contain {string} as text")
-	public void search_result_contain_as_text(String string) {
-		hmePageObjects.searchResultValidation();
-		scn.log("search result contains T-shirt as text");
+	public void search_result_contain_as_text(String productName) throws InterruptedException
+	{
+		hmePageObjects.searchResultValidation(productName);
+		scn.log("search result contains " +productName);
 	}
 	@When("User click on twitter link")
 	public void user_click_on_twitter_link() {
 		hmePageObjects.twitterLink();
 		scn.log("clicks on twitter hyper link");
-	    }
-	
+	}
+
 	@When("User navigated to new window")
 	public void user_navigated_to_new_window() {
 		cmnPageObjects.windowHandler();
 	}
-	
+
 	@Then("url contain {string}")
-	public void url_contain(String string) {
-	    String actualUrl=hmePageObjects.getUrl();
-	    boolean b = actualUrl.contains("seleniumfrmwrk");
-	    if(b==true) {
-	    	logger.info( "Actual Url" +actualUrl+ "contain seleniumfrmwrk");
-	    	scn.log("Actual Url" +actualUrl+ "contain seleniumfrmwrk");
+	public void url_contain(String expectedText) {
+		String actualUrl=hmePageObjects.getUrl();
+		logger.info( "Actual Url" +actualUrl);
+		Assert.assertTrue(actualUrl.contains(expectedText));
+		logger .info("Actual url contains "+ expectedText);
 	}
-	    else
-	    {
-	    	logger.info("Actual Url" +actualUrl+ "contain does not contain seleniumfrmwrk");
-	    	scn.log("Actual Url" +actualUrl+ "contain does not contain seleniumfrmwrk");
-	    }
-	}
+
 	@Then("Twitter account name is {string}")
-	public void twitter_account_name_is(String string) {
-		hmePageObjects.validateAccountName();
+	public void twitter_account_name_is(String accountHolderName) {
+		String accname=driver.findElement(By.xpath("//span[text()='Selenium Framework']")).getText();
+		logger.info("Expected account holder name is"+ accountHolderName);
+		Assert.assertEquals(accountHolderName,accname);		
 		scn.log("Validated twitter account name");	
-		
-			}
-	
+
+	}
+
 	@Then("main product category count is {int}")
-	public void main_product_category_count_is(Integer int1) {
-	    int count=hmePageObjects.productCategoris();
-	    logger.info("Count of the product will displayed on page is :"+count);
-	    scn.log("Displayed of total count of main categories");
+	public void main_product_category_count_is(Integer expectedCount) {
+		Assert.assertEquals(expectedCount, hmePageObjects.productCategory());
+	}
+
+//	@Then("Text is displayed for all three categories")
+//	public void text_is_displayed_for_all_three_categories() {
+//		hmePageObjects.txtOfProductCategoris();
+//		logger.info("Main Categories are displayed");
+//		scn.log("Main Categories are displayed");
+//	}
+	
+	@Then("{string} the displayed three categories is as shown below")
+	public void the_displayed_three_categories_is_as_shown_below(String productName) {
+		hmePageObjects.productName(productName);
 	}
 	
-	@Then("Text is displayed for all three categories")
-	public void text_is_displayed_for_all_three_categories() {
-		hmePageObjects.txtOfProductCategoris();
-		logger.info("Main Categories are displayed");
-		scn.log("Main Categories are displayed");
-	}
-		
+//	@Then("list of WOMEN categories is displayed")
+//	public void list_of_women_categories_is_displayed(String productName) {
+//		hmePageObjects.productName(productName);
+//	}
+
 
 }
 
- 

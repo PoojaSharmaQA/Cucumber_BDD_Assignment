@@ -8,6 +8,8 @@ import org.apache.logging.log4j.Logger;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 import junit.framework.Assert;
 
@@ -20,6 +22,7 @@ public class commonPageObjects {
 	
 	private By searchTextBox= By.xpath("//input[@id='search_query_top']");
 	private By logo= By.xpath("//img[@alt='My Store']");
+	//private By searchResult= By.xpath("//strong[normalize-space()='T-shirt']");
 	
 	public commonPageObjects(WebDriver driver) {
 		this.driver = driver;
@@ -27,7 +30,7 @@ public class commonPageObjects {
 	
 	public void homePageUrlLaunch(String URL) {
 		logger.info("Launching URL");
-		driver.get("http://automationpractice.com");
+		driver.get(URL);
 		
 	}
 	
@@ -50,11 +53,14 @@ public class commonPageObjects {
 		logger.info("value entered in search box:" +text);
 	}
 	
-	public void mouseHoverAction() {
-		Actions act=new Actions(driver);
-		act.moveToElement(driver.findElement(searchTextBox));
-		logger.info("Mouse hover on search text box");
-	}
+//	public void mouseHoverAction() {
+//		Actions act=new Actions(driver);
+//		act.moveToElement(driver.findElement(searchTextBox)).build().perform();
+//		WebDriverWait wait = new WebDriverWait(driver,20);
+//		wait.until(ExpectedConditions.presenceOfElementLocated(searchTextBox));
+//		logger.info("Mouse hover on search text box");
+//	}
+	
 	
 public void windowHandler() {
 		
